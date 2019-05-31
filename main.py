@@ -1,22 +1,22 @@
 import torch
 import numpy as np
-from env import Env
+from env import TRex
 from agent import Agent
 
 if __name__ == '__main__':
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-    env = Env()
+    env = TRex()
     agent = Agent(env, device)
 
-    for _ in range(500):
+    for _ in range(10000):
         state = env.reset()
         agent.memory_reset()
 
         t = 0
         done = False
         while not done:
-            t += 1            
+            t += 1
             
             action = agent.select_action(state)
 

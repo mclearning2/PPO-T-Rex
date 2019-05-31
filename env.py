@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import pickle as pkl
 
-class Env:
+class TRex:
     def __init__(self):
         self.driver = webdriver.Chrome("/home/kmc/Desktop/chromedriver")
         self.driver.get("http://www.trex-game.skipser.com/")
@@ -41,7 +41,6 @@ class Env:
         return self.history
 
     def step(self, action):
-        
         # JUMP
         if action == 1:
             self.body.send_keys(Keys.SPACE)
@@ -50,10 +49,10 @@ class Env:
 
         # Game Over
         if np.all(frame[20:27, 72:80] == self.game_over_array):
-            reward = -100
+            reward = -10
             done = True
         else:
-            reward = 1
+            reward = 0.1
             done = False
 
         next_state = np.expand_dims(frame, axis=0)

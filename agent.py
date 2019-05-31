@@ -10,12 +10,12 @@ class Agent:
 
         self.batch_size = 32
         self.epsilon = 0.2
-        self.n_epoch = 8
+        self.n_epoch = 4
         self.gamma = 0.99
         self.tau = 0.96
         
         self.model = Net(env.state_size, env.action_size).to(device)
-        self.optim = optim.Adam(self.model.parameters())
+        self.optim = optim.Adam(self.model.parameters(), lr=0.0001)
     
     def memory_reset(self):
         self.states = []
@@ -32,9 +32,10 @@ class Agent:
         policy, value = self.model(state)
         
         policy, value = policy[0], value[0]
-
+        
         probablity = policy.cpu().detach().numpy()
         action = np.random.choice(self.env.action_size, 1, p=probablity)[0]
+
         log_probs = torch.log(policy[action])
 
         self.states.append(state)
@@ -94,6 +95,8 @@ class Agent:
                 # ============================================================
                 critic_loss = (return_ - value.squeeze()).pow(2).mean()
                 # ============================================================
+
+                print(actor_loss, critic_loss)
 
                 loss = actor_loss + 0.5 * critic_loss
 

@@ -12,9 +12,9 @@ class Net(nn.Module):
         self.cnn = nn.Sequential(
             nn.Conv2d(input_size[0], 32, 8, 4),
             nn.ReLU(),
-            nn.Conv2d(32, 64, 4, 2),
+            nn.Conv2d(32, 32, 4, 2),
             nn.ReLU(),
-            nn.Conv2d(64, 64, 3, 1),
+            nn.Conv2d(32, 32, 3, 1),
             nn.ReLU(),
         )
 
