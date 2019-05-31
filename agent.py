@@ -33,6 +33,8 @@ class Agent:
         
         policy, value = policy[0], value[0]
 
+        print(policy)
+
         probablity = policy.cpu().detach().numpy()
         action = np.random.choice(self.env.action_size, 1, p=probablity)[0]
 

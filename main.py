@@ -13,6 +13,7 @@ if __name__ == '__main__':
         state = env.reset()
         agent.memory_reset()
 
+        score = 0
         t = 0
         done = False
         while not done:
@@ -21,6 +22,8 @@ if __name__ == '__main__':
             action = agent.select_action(state)
 
             next_state, reward, done = env.step(action)
+
+            score += reward
 
             reward = torch.FloatTensor(np.array([reward])).to(device)
             done = torch.FloatTensor(np.array([done], dtype=np.float)).to(device)
@@ -35,6 +38,6 @@ if __name__ == '__main__':
                 agent.train_model(state)
                 t = 0
 
-        print("Reward", reward)
+        print("Score", score)
         
         
