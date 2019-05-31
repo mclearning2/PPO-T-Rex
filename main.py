@@ -34,5 +34,7 @@ if __name__ == '__main__':
                 print("Train")
                 agent.train_model(state)
                 t = 0
+
+        print("Reward", reward)
         
         
