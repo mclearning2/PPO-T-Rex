@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
             state = next_state
 
-            if t >= 30 or done:
+            if t >= 100 or done:
                 print("Train")
                 agent.train_model(state)
                 t = 0

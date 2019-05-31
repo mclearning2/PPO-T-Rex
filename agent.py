@@ -10,7 +10,7 @@ class Agent:
 
         self.batch_size = 32
         self.epsilon = 0.2
-        self.n_epoch = 4
+        self.n_epoch = 8
         self.gamma = 0.99
         self.tau = 0.96
         
@@ -78,11 +78,10 @@ class Agent:
                 self.ppo_iter(states, actions, log_probs, returns, advantage):
 
                 policy, value = self.model(state)
-
                 # Actor Loss
                 # ============================================================
-                new_log_probs = policy[0][action]
-                ratio = (new_log_probs - old_log_probs).exp()                
+                new_log_probs = policy.gather(1, action.unsqueeze(1))
+                ratio = (new_log_probs - old_log_probs).exp()
                 
                 surr_loss = ratio * adv
                 clipped_surr_loss = torch.clamp(ratio, 1.0-epsilon, 1.0+epsilon) * adv         
@@ -93,7 +92,7 @@ class Agent:
                 # Critic Loss
                 #TODO: clip value by epsilon, clip gradient by norm
                 # ============================================================
-                critic_loss = (return_ - value).pow(2).mean()
+                critic_loss = (return_ - value.squeeze()).pow(2).mean()
                 # ============================================================
 
                 loss = actor_loss + 0.5 * critic_loss
@@ -109,11 +108,11 @@ class Agent:
 
         returns = self.compute_gae(last_value)
 
-        returns = torch.cat(returns).detach() 
-        log_probs = torch.cat(self.log_probs).detach() 
-        values = torch.cat(self.values).detach()
-        states = torch.cat(self.states) 
-        actions = torch.cat(self.actions)
+        returns = torch.cat(returns).detach().cuda()
+        log_probs = torch.cat(self.log_probs).detach().cuda()
+        values = torch.cat(self.values).detach().cuda()
+        states = torch.cat(self.states).cuda() 
+        actions = torch.cat(self.actions).cuda()
 
         advantage = returns - values
 
