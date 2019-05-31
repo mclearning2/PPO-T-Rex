@@ -32,7 +32,7 @@ class Agent:
         policy, value = self.model(state)
         
         policy, value = policy[0], value[0]
-        
+
         probablity = policy.cpu().detach().numpy()
         action = np.random.choice(self.env.action_size, 1, p=probablity)[0]
 
@@ -95,8 +95,6 @@ class Agent:
                 # ============================================================
                 critic_loss = (return_ - value.squeeze()).pow(2).mean()
                 # ============================================================
-
-                print(actor_loss, critic_loss)
 
                 loss = actor_loss + 0.5 * critic_loss
 
